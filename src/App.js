@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => {
         setLoading(true);
-    }, 1)
+    }, 5000)
 }, []);
   const inputs = [
     {
