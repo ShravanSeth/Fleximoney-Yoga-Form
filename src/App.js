@@ -6,7 +6,16 @@ import Service from "./services/httpService";
 import Modal from 'react-modal';
 
 const App = () => {
-  //USESTATE VARIABLES
+
+  //LOADER
+  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    setTimeout(() => {
+        setLoading(true);
+    }, 5000)
+}, []);
+
+  //VARIABLES
   const services = new Service();
   const [modalIsOpen, setIsOpen] = useState(false);
   const [res, setRes]= useState("")
@@ -16,12 +25,8 @@ const App = () => {
     feesOfMonth: new Date(),
     batch: "",
   });
-  const [loading, setLoading] = useState(false)
-  useEffect(() => {
-    setTimeout(() => {
-        setLoading(true);
-    }, 5000)
-}, []);
+  
+  //MODAL CSS
   const customStyles = {
     content: {
       top: '50%',
@@ -34,6 +39,7 @@ const App = () => {
     },
   };
   
+  //INPUTS
   const inputs = [
     {
       id: 1,
@@ -75,6 +81,20 @@ const App = () => {
     { value: '5-6pm', label: '5 - 6 PM' }
   ]
 
+  //MODAL FUNCTIONS
+  function openModal() {
+    setIsOpen(true);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  //FORM FUNCTIONS
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+    console.log(values)
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     services.post("/fees/payfees",values).then((res)=>{
@@ -86,20 +106,7 @@ const App = () => {
     })
   };
 
-  function openModal() {
-    setIsOpen(true);
-  }
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-    console.log(values)
-  };
-
   return (
-    
     <div className="app">
       <Modal
         isOpen={modalIsOpen}
