@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGO_URI, { useUnifiedTopology: true, useNewUrlPar
 .catch((e)=> console.log(e));
 
 app.use(cors({
-   origin: "https://flexmoney-yoga-form.netlify.app/", 
+   origin: "https://flexmoney-yoga-form.netlify.app", 
    credentials: true,
    methods: "GET,POST,PUT,DELETE",
 }))
