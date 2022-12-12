@@ -10,7 +10,10 @@ var cors = require("cors");
 mongoose.connect(process.env.MONGO_URI, { useUnifiedTopology: true, useNewUrlParser: true }).then(() => console.log('Mongodb is connected'))
 .catch((e)=> console.log(e));
 
-app.use(cors())
+app.use(cors({
+    origin: "https://flexmoney-yoga-form.netlify.app/", 
+   credentials: true 
+}))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan('dev'))
