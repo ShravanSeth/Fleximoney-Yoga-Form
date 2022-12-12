@@ -2,10 +2,11 @@ const express = require('express');
 const User = require('../models/User')
 const router = express.Router();
 
-
+//CompletePayment() [MOCK FUNCTION IS UPDATED HERE]
 router.post('/payfees', async (req, res) => {
-    const newUser= new User(req.body);
 
+    //IF THE THIRD PARTY APP ACCEPTS THE PAYMENT THEN:
+    const newUser= new User(req.body);
     User.findOne({username:newUser.username}).then((user)=>{
         console.log(user)
         if(user.feesOfMonth.find(function(element){
@@ -41,12 +42,19 @@ router.post('/payfees', async (req, res) => {
         }
         catch(e){
             console.log(e)
-            res.status(406).json({
+            res.status(400).json({
                 success:false,
                 message:"Some error occured"
             })
         }
-    })   
+    })
+    //ELSE WE WILL RETURN THIS
+    // .catch(e){
+    //     res.status(400).json({
+    //         success:false,
+    //         message:"Payment Failed"
+    //     })
+    // }
 });
 
 

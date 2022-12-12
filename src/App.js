@@ -33,6 +33,7 @@ const App = () => {
       left: '50%',
       right: 'auto',
       width:'35%',
+      textAlign:'center',
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',

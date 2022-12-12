@@ -11,11 +11,11 @@ mongoose.connect(process.env.MONGO_URI, { useUnifiedTopology: true, useNewUrlPar
 .catch((e)=> console.log(e));
 
 app.use(cors())
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan('dev'))
 app.use("/", require("./routes/index"));
-app.use("/fees", require("./routes/fees"));
+app.use("/fees", require("./routes/CompletePayment"));
 
 
 //404 Request
@@ -25,6 +25,7 @@ app.all("*", (req, res) => {
       message: "Page not found",
     });
   });
+
 
 
 let port = process.env.PORT;
