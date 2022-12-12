@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import FormInput from "./components/FormInput";
 import Select from "react-select";
+import Service from "./services/httpService";
+import Modal from 'react-modal';
 
 const App = () => {
+  //USESTATE VARIABLES
+  const services = new Service();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [res, setRes]= useState("")
   const [values, setValues] = useState({
     username: "",
-    // email: "",
     age: "",
     feesOfMonth: new Date(),
     batch: "",
@@ -17,6 +22,18 @@ const App = () => {
         setLoading(true);
     }, 5000)
 }, []);
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      width:'35%',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+  
   const inputs = [
     {
       id: 1,
@@ -29,22 +46,13 @@ const App = () => {
       pattern: "^[A-Za-z0-9]{3,16}$",
       required: true,
     },
-    // {
-    //   id: 2,
-    //   name: "email",
-    //   type: "email",
-    //   placeholder: "Email",
-    //   errorMessage: "It should be a valid email address!",
-    //   label: "Email",
-    //   required: true,
-    // },
     {
       id: 2,
       name: "feesOfMonth",
       type:"month",
       placeholder: "Fees for Month",
       errorMessage:
-        "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
+        "Enter the Month",
       label: "Fees for Month",
       required: true,
     },
@@ -56,18 +64,8 @@ const App = () => {
       pattern:"^(1[89]|[2-5][0-9]|6[0-5])$",
       errorMessage: "Age should be between 18 to 65",
       label: "Age",
+      required:true,
     },
-    
-    // {
-    //   id: 5,
-    //   name: "batch",
-    //   type: "select",
-    //   placeholder: "Select Batch",
-    //   errorMessage: "It is required",
-    //   label: "Select Batch",
-    //   pattern: values.password,
-    //   required: true,
-    // },
   ];
 
   const options = [
@@ -79,7 +77,21 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    services.post("/fees/payfees",values).then((res)=>{
+      setRes(res.data.message);
+      openModal();
+    }).catch((res)=>{
+      setRes(res.data.message);
+      openModal();
+    })
   };
+
+  function openModal() {
+    setIsOpen(true);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -89,6 +101,15 @@ const App = () => {
   return (
     
     <div className="app">
+      <Modal
+        isOpen={modalIsOpen}
+        style={customStyles}
+        onRequestClose={closeModal}
+      >
+        <h2 >{res}</h2>
+        <button onClick={closeModal}>close</button>
+
+      </Modal>
       {loading?
       <form onSubmit={handleSubmit}>
         <h1>Yoga Registration Form</h1>
@@ -103,7 +124,7 @@ const App = () => {
         ))}
         <div>
         <label>Select your Batch</label>
-        <Select options={options} name="batch"  onChange={(e) => {
+        <Select required={true} options={options} name="batch"  onChange={(e) => {
     setValues({ ...values, batch: e.value });
   }} />
         </div>

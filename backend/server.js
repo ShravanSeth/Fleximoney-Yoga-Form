@@ -4,10 +4,13 @@ require('dotenv').config();
 const bodyParser = require("body-parser");
 const mongoose= require("mongoose");
 const morgan= require("morgan");
+var cors = require("cors");
+
 
 mongoose.connect(process.env.MONGO_URI, { useUnifiedTopology: true, useNewUrlParser: true }).then(() => console.log('Mongodb is connected'))
 .catch((e)=> console.log(e));
 
+app.use(cors())
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 app.use(morgan('dev'))

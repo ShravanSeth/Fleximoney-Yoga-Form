@@ -11,7 +11,8 @@ const UserSchema= new Schema({
         required: [true, "age required"],
       },
       feesOfMonth: {
-        type: String,
+        type: Array,
+        default:[],
         required: [true, "Month required"],
       },
       batch: {
